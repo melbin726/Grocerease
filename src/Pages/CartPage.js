@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Grid, Card, CardContent, Typography, Button } from '@mui/material';
+import { Grid, Card, CardContent, Typography, Button ,Box} from '@mui/material';
 import Header from '../Components/Header';
 import { useNavigate } from 'react-router-dom';
+import Footer from '../Components/footer'
 
 const CartPage = () => {
     const [cartItems, setCartItems] = useState([]);
@@ -13,6 +14,9 @@ const CartPage = () => {
 
     useEffect(() => {
         fetchCartItems();
+
+       
+
     }, []);
 
     const fetchCartItems = () => {
@@ -32,6 +36,12 @@ const CartPage = () => {
         });
     };
 
+
+
+
+
+
+
     const handleRemoveFromCart = (item) => {
         try {
             const yourtoken = localStorage.getItem('token');
@@ -47,6 +57,9 @@ const CartPage = () => {
                 alert('Item deleted successfully');
                 console.log('deleted successfully:', response.data);
                 fetchCartItems();
+
+
+                
 
             });
            
@@ -123,31 +136,45 @@ const CartPage = () => {
                                 <Typography variant="body2" color="text.secondary">
                                     Price: ${item.productPrice}
                                 </Typography>
-                                <Button 
-                                    variant="contained" 
-                                    sx={{ backgroundColor: 'black', color: 'white', marginRight: 2, '&:hover': { backgroundColor: '#333' } }}
-                                    onClick={() => handleRemoveFromCart(item)}
-                                >
-                                    Remove
-                                </Button>
-                                
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
+                                     <Button 
+                                        variant="contained" 
+                                        sx={{ 
+                                            backgroundColor: 'black', 
+                                            color: 'white', 
+                                            '&:hover': { backgroundColor: '#333' }, 
+                                            width: { xs: '100%', sm: '45%', md: '45%' },
+                                            mr: 1,
+                                        }}
+                                        onClick={() => handleRemoveFromCart(item)}
+                                    >
+                                        Remove
+                                    </Button>
+                                   
+                                </Box>
                             </CardContent>
                         </Card>
-                        
                     </Grid>
-                    
-                    
                 ))}
-                 <Button
+                <Grid item xs={12} display="flex" justifyContent="center">
+                    <Button
                         type="submit"
-                        fullWidth
                         variant="contained"
-                        sx={{ backgroundColor: 'black', color: 'white', mt: 2,width: '150px'    ,marginLeft : '5% '}}
+                        sx={{ 
+                            backgroundColor: 'black', 
+                            color: 'white', 
+                            mt: 2, 
+                            width: { xs: '100%', sm: '50%', md: '25%' } 
+                        }}
                         onClick={handleOrder}
                     >
-                        Submit
+                        Confirm Order
                     </Button>
+                    
+                </Grid>
             </Grid>
+            <Footer />
+           
         </>
 
        
