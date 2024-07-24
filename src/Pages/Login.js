@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Container, Typography, Box, InputAdornment, IconButton, Grid, Paper } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import axios from 'axios';
+import { styled } from '@mui/system';
+
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -13,6 +15,13 @@ const Login = () => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
+    const AnimatedImage = styled('div')({
+        transition: 'transform 0.3s ease-in-out',
+        '&:hover': {
+          transform: 'scale(1.1)',
+        },
+      });
+
     const CreateButtonClick = () => {
         navigate('/Register');
     };
@@ -20,6 +29,13 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+
+        const AnimatedTypography = styled(Typography)({
+            transition: 'transform 0.3s ease-in-out',
+            '&:hover': {
+              transform: 'scale(1.1)',
+            },
+          });
 
         try {
             const response = await axios.post('http://localhost:59817/api/Login/Login', {
@@ -157,11 +173,13 @@ const Login = () => {
                         </Box>
                     </Grid>
                     <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <AnimatedImage>
                         <img 
                             src={`${process.env.PUBLIC_URL}/Black_and_Red_Minimalist_Modern_Registration_Gym_Website_Prototype-removebg-preview.png`} 
                             alt="GrocerEase" 
                             style={{ maxWidth: '100%', height: 'auto' }} 
                         />
+                        </AnimatedImage>
                     </Grid>
                 </Grid>
             </Paper>

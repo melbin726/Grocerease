@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Container, Typography, Box, FormControlLabel, Checkbox, Grid, Paper } from '@mui/material';
 import axios from 'axios';
+import { styled } from '@mui/system';
 
 const Register = () => {
     const [userName, setUsername] = useState('');
@@ -21,6 +22,13 @@ const Register = () => {
     const CreateButtonClick = () => {
         navigate('/');
     };
+
+    const AnimatedImage = styled('div')({
+        transition: 'transform 0.3s ease-in-out',
+        '&:hover': {
+          transform: 'scale(1.1)',
+        },
+      });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -219,11 +227,13 @@ const Register = () => {
                         </Box>
                     </Grid>
                     <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <AnimatedImage>
                         <img 
                             src={`${process.env.PUBLIC_URL}/Untitled_design-removebg-preview.png`} 
                             alt="GrocerEase" 
                             style={{ maxWidth: '100%', height: 'auto' }} 
                         />
+                        </AnimatedImage>
                     </Grid>
                 </Grid>
             </Paper>

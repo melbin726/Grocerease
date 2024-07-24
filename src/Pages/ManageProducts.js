@@ -4,12 +4,45 @@ import { TextField, Button, Container, Typography, Box, Paper, Grid } from '@mui
 import axios from 'axios';
 import Header from '../Components/Header';
 import Footer from '../Components/footer';
+import { styled } from '@mui/system';
 
 const ManageProducts = () => {
     const [productName, setProductName] = useState('');
     const [productPrice, setProductPrice] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
+
+
+    const AnimatedImage = styled('div')({
+        transition: 'transform 0.3s ease-in-out',
+        '&:hover': {
+          transform: 'scale(1.1)',
+        },
+      });
+      
+      
+
+      const AnimatedTypography = styled(Typography)({
+        transition: 'transform 0.3s ease-in-out',
+        '&:hover': {
+          transform: 'scale(1.1)',
+        },
+      });
+
+      const HoverButton = styled('button')({
+        backgroundColor: 'black',
+        color: 'white',
+        width: '100%',
+        marginTop: '16px',
+        padding: '12px 0',
+        border: 'none',
+        cursor: 'pointer',
+        transition: 'background-color 0.3s ease-in-out',
+        '&:hover': {
+            backgroundColor: 'gray',
+        },
+    });
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -60,9 +93,9 @@ const ManageProducts = () => {
                                     alignItems: 'center',
                                 }}
                             >
-                                <Typography component="h1" variant="h5" sx={{ marginBottom: 2 }}>
+                                <AnimatedTypography variant="h4" component="h1" fontFamily={'Marker Felt'} mb={2}>
                                     Add Product
-                                </Typography>
+                                </AnimatedTypography>
                                 {error && (
                                     <Typography color="error" sx={{ mt: 2 }}>
                                         {error}
@@ -92,14 +125,9 @@ const ManageProducts = () => {
                                         value={productPrice}
                                         onChange={(e) => setProductPrice(e.target.value)}
                                     />
-                                    <Button
-                                        type="submit"
-                                        fullWidth
-                                        variant="contained"
-                                        sx={{ backgroundColor: 'black', color: 'white', mt: 2 }}
-                                    >
+                                     <HoverButton type="submit">
                                         Add
-                                    </Button>
+                                        </HoverButton>
                                 </Box>
                             </Box>
                         </Grid>
@@ -112,11 +140,13 @@ const ManageProducts = () => {
                                     height: '100%',
                                 }}
                             >
+                                <AnimatedImage>
                                 <img
                                     src={`${process.env.PUBLIC_URL}/Untitled_design-removebg-previeww.png`}
                                     alt="Product Illustration"
                                     style={{ maxWidth: '100%', height: 'auto' }}
                                 />
+                                </AnimatedImage>
                             </Box>
                         </Grid>
                     </Grid>
