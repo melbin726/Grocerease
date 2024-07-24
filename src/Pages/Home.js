@@ -15,7 +15,7 @@
         const [open, setOpen] = useState(false);
         const [productName, setProductName] = useState('');
     
-    /*
+    
         useEffect(() => {
             fetchItems();
         }, []);
@@ -36,25 +36,9 @@
                     console.error('There was an error fetching the grocery items!', error);
                 });
         };
-    */
+    
 
-    //added start
-
-    useEffect(() => {
-        const dummyData = [
-            { productID: 1, productName: 'Apple', productPrice: 2, quantity: 1 },
-            { productID: 2, productName: 'Banana', productPrice: 1, quantity: 1 },
-            { productID: 3, productName: 'Carrot', productPrice: 3, quantity: 1 },
-            { productID: 4, productName: 'Orenge', productPrice: 4, quantity: 1},
-            { productID: 5, productName: 'Apple', productPrice: 8, quantity: 1},
-            { productID: 6, productName: 'Fish', productPrice: 3, quantity: 1 },
-            { productID: 3, productName: 'Carrot', productPrice: 3, quantity: 1 },
-            { productID: 3, productName: 'Carrot', productPrice: 3, quantity: 1 },  
-        ];
-        setItems(dummyData);
-    }, []);
-
-    // added end
+    
 
 
 
@@ -68,50 +52,15 @@
                 setItems(updatedItems);
             }
         };
-    /*
-        const handleAddToCart = (item) => {
-            try {
-                const yourtoken = localStorage.getItem('token');
-                const userID = localStorage.getItem('userID');
-                const response = axios.post('http://localhost:59817/api/Cart/AddToCart', {
-                    cartID: '',
-                    userID: userID,
-                    productName: item.productName,
-                    productPrice : item.productPrice * item.quantity,
-                    quantity: item.quantity,
-                    isDeleted: false
-                }, {
-                    headers: {
-                        authorization: `Bearer ${yourtoken}`,
-                        'Content-Type': 'application/json',
-                        'accept': 'application/json'
-                    }
-                })
-                .then(response => {
-                    alert('item added to Cart');
-                    console.log('Added successfully:', response.data);  
-                });
-            
-            } catch (error) {
-                if (error.response) {
-                    console.error('Add failed:', error.response.data);
-                } else if (error.request) {
-                    console.error('No response received:', error.request);
-                } else {
-                    console.error('Error setting up request:', error.message);
-                }
-            }
-        };
-        */
+    
 
 
-
-    //added start
+    
     const handleAddToCart = (item) => {
         alert(`${item.productName} added to Cart with quantity ${item.quantity}`);
     };
 
-    //added end
+    
 
 
 

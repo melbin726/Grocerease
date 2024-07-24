@@ -1,10 +1,12 @@
 // src/components/ContactUs.jsx
 
 import React, { useRef } from 'react';
-import { Box, Typography, TextField, Button } from '@mui/material';
+ 
+import { TextField, Button, Container, Typography, Box, Paper, Grid } from '@mui/material';
 import emailjs from '@emailjs/browser';
 import Header from './Header';
 import Footer from './footer';
+import { styled } from '@mui/system';
 
 const ContactUs = () => {
   const form = useRef();  
@@ -26,7 +28,19 @@ const ContactUs = () => {
       );
   };
 
+  const AnimatedImage = styled('div')({
+    transition: 'transform 0.3s ease-in-out',
+    '&:hover': {
+      transform: 'scale(1.1)',
+    },
+  });
   return (
+    <>
+    <Header />
+    <Container component="main" maxWidth="md" sx={{ flexGrow: 1 }}>
+        <Paper elevation={3} sx={{ padding: 2, marginTop: 4 }}>
+            <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
     <Box
       sx={{
         display: 'flex',
@@ -38,8 +52,8 @@ const ContactUs = () => {
         backgroundColor: '#f0f0f0',
       }}
     >
-      <Header />
-      <Typography variant="h4" gutterBottom sx={{paddingTop:4}}>
+      
+      <Typography variant="h4" gutterBottom >
         Contact Us
       </Typography>
       <Box
@@ -95,8 +109,33 @@ const ContactUs = () => {
           Send
         </Button>
       </Box>
-      <Footer />
+     
     </Box>
+    </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    height: '100%',
+                                }}
+                            >
+                                <AnimatedImage>
+                                <img
+                                    src={`${process.env.PUBLIC_URL}/Contactus-removebg-preview.png`}
+                                    alt="Product Illustration"
+                                    style={{ maxWidth: '100%', height: 'auto' }}
+                                />
+                                </AnimatedImage>
+                            </Box>
+                        </Grid>
+                    </Grid>
+                </Paper>
+            </Container>
+            <Footer />
+            </>
+       
   );
 };
 
