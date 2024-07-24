@@ -7,7 +7,7 @@ import Header from './Header';
 import Footer from './footer';
 
 const ContactUs = () => {
-  const form = useRef();
+  const form = useRef();  
 
   const sendEmail = (e) => {
     e.preventDefault();
