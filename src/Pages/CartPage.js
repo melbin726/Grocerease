@@ -168,7 +168,7 @@ const CartPage = () => {
                         }}
                         onClick={handleOrder}
                     >
-                        Confirm Order
+                        Place Order
                     </Button>
                     
                 </Grid>

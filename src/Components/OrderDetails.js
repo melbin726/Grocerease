@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { Grid, Card, CardContent, Typography, Button } from '@mui/material';
+import { Grid, Card, CardContent, Typography, Button, Box } from '@mui/material';
 import Header from '../Components/Header';
+import Footer from '../Components/footer'
 
 const OrderDetails = () => {
     const navigate = useNavigate(); 
@@ -82,19 +83,14 @@ const OrderDetails = () => {
     return (
         <>
             <Header />
-            <Typography variant="body1" sx={{ marginRight: 2 }}>
-                Order number: {orderNumber}
-            </Typography>
-            <Button
-                variant="contained"
-                sx={{ backgroundColor: 'black', color: 'white', marginRight: 2, '&:hover': { backgroundColor: '#333' } }}
-                onClick={handleExport}
-            >
-                Export
-            </Button>
-            <Grid container spacing={3} sx={{ marginTop: 4, marginBottom: 4, marginLeft: 4, marginRight: 4 }}>
+            <Box sx={{ padding: 2, textAlign: 'center' }}>
+                <Typography variant="h5" sx={{ marginBottom: 2 }}>
+                    Order number: {orderNumber}
+                </Typography>
+            </Box>
+            <Grid container spacing={3} sx={{ marginTop: 2, paddingLeft: 2, paddingRight: 2 }}>
                 {orderDetails.map(detail => (
-                    <Grid item key={detail.orderDetailsID} xs={12}>
+                    <Grid item key={detail.orderDetailsID} xs={12} md={6}>
                         <Card sx={{
                             boxShadow: 3,
                             transition: 'transform 0.2s',
@@ -118,6 +114,20 @@ const OrderDetails = () => {
                     </Grid>
                 ))}
             </Grid>
+            <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 4 }}>
+                <Button
+                    variant="contained"
+                    sx={{ 
+                        backgroundColor: 'black', 
+                        color: 'white', 
+                        '&:hover': { backgroundColor: '#333' } 
+                    }}
+                    onClick={handleExport}
+                >
+                    Export to PDF
+                </Button>
+            </Box>
+            <Footer/>
         </>
     );
 };

@@ -55,10 +55,39 @@
     
 
 
-    
-    const handleAddToCart = (item) => {
-        alert(`${item.productName} added to Cart with quantity ${item.quantity}`);
-    };
+        const handleAddToCart = (item) => {
+            try {
+                const yourtoken = localStorage.getItem('token');
+                const userID = localStorage.getItem('userID');
+                const response = axios.post('http://localhost:59817/api/Cart/AddToCart', {
+                    cartID: '',
+                    userID: userID,
+                    productName: item.productName,
+                    productPrice : item.productPrice * item.quantity,
+                    quantity: item.quantity,
+                    isDeleted: false
+                }, {
+                    headers: {
+                        authorization: `Bearer ${yourtoken}`,
+                        'Content-Type': 'application/json',
+                        'accept': 'application/json'
+                    }
+                })
+                .then(response => {
+                    alert('item added to Cart');
+                    console.log('Added successfully:', response.data);  
+                });
+               
+            } catch (error) {
+                if (error.response) {
+                    console.error('Add failed:', error.response.data);
+                } else if (error.request) {
+                    console.error('No response received:', error.request);
+                } else {
+                    console.error('Error setting up request:', error.message);
+                }
+            }
+        };
 
     
 
