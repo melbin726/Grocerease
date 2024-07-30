@@ -1,145 +1,189 @@
-    import React, { useState, useEffect } from 'react';
-    import axios from 'axios';
-    import { Grid, Card, CardContent, Typography, Button, IconButton, TextField ,Box,Dialog, DialogContent, DialogActions} from '@mui/material';
-    import Header from '../Components/Header';
-    import ProductDetails from '../Components/ProductDetails';
-    import { Visibility } from '@mui/icons-material';
-    import Footer from '../Components/footer';
-    import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Grid, Card, CardContent, Typography, Button, IconButton, TextField, Box, Dialog, DialogContent, DialogActions } from '@mui/material';
+import Header from '../Components/Header';
+import ProductDetails from '../Components/ProductDetails';
+import { Visibility } from '@mui/icons-material';
+import Footer from '../Components/footer';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
-    const GroceryItemList = () => {
-        const [items, setItems] = useState([]);
-        const [imageUrl, setImageUrl] = useState('');
-        const [publishedTime, setPublishedTime] = useState('');
-        const [description, setDescription] = useState('');
-        const [open, setOpen] = useState(false);
-        const [productName, setProductName] = useState('');
-    
-    
-        useEffect(() => {
-            fetchItems();
-        }, []);
+const GroceryItemList = () => {
+    const [items, setItems] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [imageUrl, setImageUrl] = useState('');
+    const [publishedTime, setPublishedTime] = useState('');
+    const [description, setDescription] = useState('');
+    const [open, setOpen] = useState(false);
+    const [productName, setProductName] = useState('');
 
-        const fetchItems = () => {
+
+    useEffect(() => {
+        fetchItems();
+    }, []);
+
+    const fetchItems = () => {
+        const yourtoken = localStorage.getItem('token');
+        axios.get('http://localhost:59817/api/Products/GetAllProducts', {
+            headers: {
+                authorization: `Bearer ${yourtoken}`,
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                const itemsWithQuantity = response.data.map(item => ({ ...item, quantity: 1 }));
+                setItems(itemsWithQuantity);
+            })
+            .catch(error => {
+                console.error('There was an error fetching the grocery items!', error);
+            });
+    };
+
+    const handleSearchInputChange = (e) => {
+        setSearchQuery(e.target.value);
+    };
+
+    const SearchItems = () => {
+        const yourtoken = localStorage.getItem('token');
+        axios.get(`http://localhost:59817/api/Products/SearchProducts?SearchText=${searchQuery}`, {
+            headers: {
+                authorization: `Bearer ${yourtoken}`,
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                const itemsWithQuantity = response.data.map(item => ({ ...item, quantity: 1 }));
+                setItems(itemsWithQuantity);
+            })
+            .catch(error => {
+                console.error('There was an error fetching the grocery items!', error);
+            });
+    };
+
+
+
+
+    const handleQuantityChange = (e, item) => {
+        const value = e.target.value;
+        if (/^\d*$/.test(value)) {
+            const newQuantity = value === '' ? '' : parseInt(value, 10);
+            const updatedItems = items.map(i =>
+                i.productID === item.productID ? { ...i, quantity: newQuantity } : i
+            );
+            setItems(updatedItems);
+        }
+    };
+
+
+
+    const handleAddToCart = (item) => {
+        try {
             const yourtoken = localStorage.getItem('token');
-            axios.get('http://localhost:59817/api/Products/GetAllProducts', {
+            const userID = localStorage.getItem('userID');
+            const response = axios.post('http://localhost:59817/api/Cart/AddToCart', {
+                cartID: '',
+                userID: userID,
+                productName: item.productName,
+                productPrice: item.productPrice * item.quantity,
+                quantity: item.quantity,
+                isDeleted: false
+            }, {
                 headers: {
                     authorization: `Bearer ${yourtoken}`,
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'accept': 'application/json'
                 }
             })
                 .then(response => {
-                    const itemsWithQuantity = response.data.map(item => ({ ...item, quantity: 1 }));
-                    setItems(itemsWithQuantity);
-                })
-                .catch(error => {
-                    console.error('There was an error fetching the grocery items!', error);
-                });
-        };
-    
-
-    
-
-
-
-        const handleQuantityChange = (e, item) => {
-            const value = e.target.value;
-            if (/^\d*$/.test(value)) {
-                const newQuantity = value === '' ? '' : parseInt(value, 10);
-                const updatedItems = items.map(i => 
-                    i.productID === item.productID ? { ...i, quantity: newQuantity } : i
-                );
-                setItems(updatedItems);
-            }
-        };
-    
-
-
-        const handleAddToCart = (item) => {
-            try {
-                const yourtoken = localStorage.getItem('token');
-                const userID = localStorage.getItem('userID');
-                const response = axios.post('http://localhost:59817/api/Cart/AddToCart', {
-                    cartID: '',
-                    userID: userID,
-                    productName: item.productName,
-                    productPrice : item.productPrice * item.quantity,
-                    quantity: item.quantity,
-                    isDeleted: false
-                }, {
-                    headers: {
-                        authorization: `Bearer ${yourtoken}`,
-                        'Content-Type': 'application/json',
-                        'accept': 'application/json'
-                    }
-                })
-                .then(response => {
                     alert('item added to Cart');
-                    console.log('Added successfully:', response.data);  
+                    console.log('Added successfully:', response.data);
                 });
-               
-            } catch (error) {
-                if (error.response) {
-                    console.error('Add failed:', error.response.data);
-                } else if (error.request) {
-                    console.error('No response received:', error.request);
-                } else {
-                    console.error('Error setting up request:', error.message);
-                }
+
+        } catch (error) {
+            if (error.response) {
+                console.error('Add failed:', error.response.data);
+            } else if (error.request) {
+                console.error('No response received:', error.request);
+            } else {
+                console.error('Error setting up request:', error.message);
             }
-        };
-
-    
-
+        }
+    };
 
 
 
-        const handleViewDetails = (item) => {
-            axios.get(`https://www.googleapis.com/customsearch/v1?key=AIzaSyCGFxS48OT3QFtIIw8cSqdBt-IGd5eMmE0&cx=6639f09a4643541c4&q=what is the vegitable ${item.productName}`)
-                .then(response => {
-                    if (response.data.items && response.data.items.length > 0) {
-                        const snippet = response.data.items[0].snippet;
-                        const metatags = response.data.items[0].pagemap.metatags[0];
-                        const ogImage = metatags['og:image'];
-                        const publishedTime = metatags['article:published_time'];
 
-                        setDescription(snippet);
-                        setImageUrl(ogImage);
-                        setPublishedTime(publishedTime);
-                        setProductName(item.productName);
-                    } else {
-                        setDescription('Description not found.');
-                        setImageUrl('');
-                        setPublishedTime('');
-                        setProductName('');
-                    }
-                    setOpen(true);
-                })
-                .catch(error => {
-                    console.error('There was an error fetching the product description!', error);
-                    setDescription('Error fetching description.');
+
+
+    const handleViewDetails = (item) => {
+        axios.get(`https://www.googleapis.com/customsearch/v1?key=AIzaSyCGFxS48OT3QFtIIw8cSqdBt-IGd5eMmE0&cx=6639f09a4643541c4&q=what is the vegitable ${item.productName}`)
+            .then(response => {
+                if (response.data.items && response.data.items.length > 0) {
+                    const snippet = response.data.items[0].snippet;
+                    const metatags = response.data.items[0].pagemap.metatags[0];
+                    const ogImage = metatags['og:image'];
+                    const publishedTime = metatags['article:published_time'];
+
+                    setDescription(snippet);
+                    setImageUrl(ogImage);
+                    setPublishedTime(publishedTime);
+                    setProductName(item.productName);
+                } else {
+                    setDescription('Description not found.');
                     setImageUrl('');
                     setPublishedTime('');
-                    setOpen(true);
-                });
-        };
+                    setProductName('');
+                }
+                setOpen(true);
+            })
+            .catch(error => {
+                console.error('There was an error fetching the product description!', error);
+                setDescription('Error fetching description.');
+                setImageUrl('');
+                setPublishedTime('');
+                setOpen(true);
+            });
+    };
 
-        const handleClose = () => {
-            setOpen(false);
-            setDescription('');
-            setImageUrl('');
-            setPublishedTime('');
-            setProductName('');
-        };
+    const handleClose = () => {
+        setOpen(false);
+        setDescription('');
+        setImageUrl('');
+        setPublishedTime('');
+        setProductName('');
+    };
 
 
 
-        
 
-        return (
-            <>
+
+    return (
+        <>
             <Header />
             <Box sx={{ padding: 4, backgroundColor: '#f9f9f9' }}>
+                <TextField
+                    fullWidth
+                    id="search"
+                    label="Search Products"
+                    variant="outlined"
+                    value={searchQuery}
+                    onChange={handleSearchInputChange}
+                    onKeyPress={(e) => e.key === 'Enter' && SearchItems()}
+                    sx={{
+                        width: {
+                            xs: '100%',   
+                            sm: '80%',    
+                            md: '60%',    
+                            lg: '50%',   
+                            xl: '40%'    
+                        },
+                        maxWidth: '600px', 
+                        margin: '0 auto',  
+                        marginBottom: 4,
+                        
+                        marginRight: 6
+                    }}
+                />
+
                 <Grid container spacing={3}>
                     {items.map(item => (
                         <Grid item key={item.productID} xs={12} sm={6} md={4}>
@@ -155,7 +199,7 @@
                                 borderRadius: '10px'
                             }}>
                                 <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                    <img src={item.imageUrl} alt={item.productName} style={{ width: '150px', height: '150px', objectFit: 'cover', borderRadius: '10px' }} />
+
                                     <Typography gutterBottom variant="h6" component="div" sx={{ marginTop: 2, fontWeight: 'bold' }}>
                                         {item.productName}
                                     </Typography>
@@ -178,15 +222,15 @@
                                         sx={{ marginTop: 2 }}
                                     />
                                     <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
-                                        <Button 
-                                            variant="contained" 
+                                        <Button
+                                            variant="contained"
                                             sx={{ backgroundColor: 'black', color: 'white', marginRight: 2, '&:hover': { backgroundColor: '#333' } }}
                                             onClick={() => handleAddToCart(item)}
                                         >
                                             Add to Cart
                                         </Button>
-                                        <IconButton 
-                                            aria-label="view details" 
+                                        <IconButton
+                                            aria-label="view details"
                                             sx={{ color: 'black' }}
                                             onClick={() => handleViewDetails(item)}
                                         >
@@ -225,6 +269,6 @@
             </Dialog>
         </>
     );
-    };
+};
 
-    export default GroceryItemList;
+export default GroceryItemList;

@@ -1,12 +1,9 @@
-// File path: C:\grocery-delivery-f\src\Pages\Login.js
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Container, Typography, Box, InputAdornment, IconButton, Grid, Paper } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import axios from 'axios';
 import { styled } from '@mui/system';
-
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -84,7 +81,10 @@ const Login = () => {
         })
             .then(response => {
                 localStorage.setItem('userID', response.data.userID);
-                
+                localStorage.setItem('firstName',response.data.firstName)
+                localStorage.setItem('lastName',response.data.lastName);
+                localStorage.setItem('isAdmin',response.data.isAdmin)
+
             })
             .catch(error => {
                 console.error('There was an error fetching the grocery items!', error);

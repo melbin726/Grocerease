@@ -10,14 +10,22 @@ const Header = () => {
     const navigate = useNavigate(); 
     const { darkMode, toggleTheme } = useContext(ThemeContext);
     const [username, setUsername] = useState('');
+    const [isadmin, setisAdmin] = useState(false);
+    
     const [drawerOpen, setDrawerOpen] = useState(false);
-
     useEffect(() => {
-        const storedUsername = localStorage.getItem('username');
-        if (storedUsername) {
-            setUsername(storedUsername);
+        const firstName = localStorage.getItem('firstName') ;
+        const lastName = localStorage.getItem('lastName') ;
+        const userName = localStorage.getItem('username');
+        const isAdmin = localStorage.getItem('isAdmin')
+        const storedUsername = firstName + ' ' + lastName + ' ('+ userName+')';
+        if (storedUsername.trim()) {
+            setUsername(storedUsername.trim());
         }
+        setisAdmin(isAdmin)
+       
     }, []);
+    
 
     const handleHomeClick = () => {
         navigate('/Home'); 
@@ -82,13 +90,14 @@ const Header = () => {
                             }
                         }} 
                         onClick={handleManageClick}
+                        style={{ visibility:isadmin=='false' ? 'hidden': 'visible' }}
                     >
                         Manage Product
                     </Typography>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <IconButton color="inherit"> 
+                        {/* <IconButton color="inherit"> 
                             <SearchIcon />
-                        </IconButton>
+                        </IconButton> */}
                         <Typography 
                             variant="body1" 
                             sx={{ 

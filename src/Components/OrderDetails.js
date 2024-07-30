@@ -9,6 +9,8 @@ const OrderDetails = () => {
     const navigate = useNavigate(); 
     const [orderDetails, setOrderDetails] = useState([]);
     const [orderNumber, setOrderNumber] = useState('');
+    const [orderPrice, setOrderPrice] = useState('');
+    const [orderDate, setOrderDate] = useState('');
 
     useEffect(() => {
         const orderID = localStorage.getItem('OrderID');
@@ -26,6 +28,9 @@ const OrderDetails = () => {
                 }
             });
             setOrderNumber(response.data.orderNumber);
+            setOrderDate(response.data.orderDate)
+            setOrderPrice(response.data.orderPrice)
+
         } catch (error) {
             console.error('There was an error fetching the order details!', error);
         }
@@ -84,8 +89,14 @@ const OrderDetails = () => {
         <>
             <Header />
             <Box sx={{ padding: 2, textAlign: 'center' }}>
-                <Typography variant="h5" sx={{ marginBottom: 2 }}>
-                    Order number: {orderNumber}
+                <Typography variant="h6" sx={{ marginBottom: 2 }}>
+                    Order number : {orderNumber}
+                </Typography>
+                <Typography variant="h6" sx={{ marginBottom: 2 }}>
+                    Order Date : {orderDate.substring(0, 10)}
+                </Typography>
+                <Typography variant="h6" sx={{ marginBottom: 2 }}>
+                    Order Price : ${orderPrice}
                 </Typography>
             </Box>
             <Grid container spacing={3} sx={{ marginTop: 2, paddingLeft: 2, paddingRight: 2 }}>
